@@ -1,6 +1,6 @@
 import os
 from app import app, db, login_manager
-from flask import render_template, request, redirect, url_for, flash, session, abort
+from flask import render_template, request, redirect, url_for, flash, session, abort, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash
@@ -26,7 +26,7 @@ def about():
 
 
 @app.route('/upload', methods=['POST', 'GET'])
-@login_required      # only accessible when a user is logged in
+@login_required    # only accessible when a user is logged in
 def upload():
     # Instantiate your form class
     form = UploadForm()
@@ -43,6 +43,34 @@ def upload():
             return redirect(url_for('home')) # Update this to redirect the user to a route that displays all uploaded image files
 
     return render_template('upload.html', form=form)
+
+
+def get_uploaded_images():
+    """Returns a list of filenames in the folder"""
+    import os
+    rootdir = os.getcwd()
+    uploaded_list = []
+    
+    for subdir, dirs, files in os.walk(rootdir + '/uploads'):
+        for file in files:
+            # Append filename or full path
+            uploaded_list.append(file)     # just the filename
+            # uploaded_list.append(os.path.join(subdir, file))  # full path if needed
+    return uploaded_list
+
+
+@app.route('/uploads/<filename>')
+def get_image(filename):
+    """Return a specific image from the upload folder"""
+    return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
+
+
+@app.route('/files')
+@login_required    # only accessible when a user is logged in
+def files():
+    """Render the website's file page."""
+    images = get_uploaded_images()
+    return render_template("files.html", images=images())
 
 
 @app.route('/login', methods=['POST', 'GET'])
