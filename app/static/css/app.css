@@ -27,7 +27,6 @@ h1{
     display: grid;
     grid-template-columns: repeat(3, 1fr);    /* 3 images per row */
     gap: 20px;
-    
     list-style-type: none;
     padding: 0;
 }
@@ -36,5 +35,4 @@ h1{
     object-fit: cover;
     width: 350px;
     height: 220px;
-
 }
