@@ -47,15 +47,15 @@ def upload():
 
 def get_uploaded_images():
     """Returns a list of filenames in the folder"""
-    import os
     rootdir = os.getcwd()
     uploaded_list = []
     
     for subdir, dirs, files in os.walk(rootdir + '/uploads'):
         for file in files:
-            # Append filename or full path
-            uploaded_list.append(file)     # just the filename
-            # uploaded_list.append(os.path.join(subdir, file))  # full path if needed
+            if file != ".gitkeep":
+                # Append filename or full path
+                uploaded_list.append(file)     # just the filename
+                # uploaded_list.append(os.path.join(subdir, file))  # full path if needed
     return uploaded_list
 
 
@@ -70,7 +70,7 @@ def get_image(filename):
 def files():
     """Render the website's file page."""
     images = get_uploaded_images()
-    return render_template("files.html", images=images())
+    return render_template("files.html", images=images)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -105,6 +105,7 @@ def login():
             flash('Invalid username or password.', 'danger')
             
     return render_template("login.html", form=form)
+
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session

@@ -18,3 +18,23 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+h1{
+    margin-bottom: 20px;
+}
+
+.images{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);    /* 3 images per row */
+    gap: 20px;
+    
+    list-style-type: none;
+    padding: 0;
+}
+
+.images img{
+    object-fit: cover;
+    width: 350px;
+    height: 220px;
+
+}
